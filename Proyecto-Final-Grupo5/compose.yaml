@@ -9,9 +9,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       JALECO_READER_PASSWORD: ${JALECO_READER_PASSWORD:?Set JALECO_READER_PASSWORD in .env}
+      JALECO_MEMORY_PASSWORD: ${JALECO_MEMORY_PASSWORD:?Set JALECO_MEMORY_PASSWORD in .env}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./n8n/db/init.sql:/docker-entrypoint-initdb.d/01-jaleco.sql:ro
+      - ./n8n/db/002-chat-memory.sql:/docker-entrypoint-initdb.d/02-chat-memory.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 5s
